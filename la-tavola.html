@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Tavola | Premium Restaurant</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Embedded CSS Styling -->
+    <style>
+        /* ================= VARIABLES & ROOT ================= */
+        :root {
+            --bg-color: #fdfbf7;
+            --text-color: #2c2c2c;
+            --primary-color: #c59b27;
+            --primary-dark: #a47f1c;
+            --card-bg: #ffffff;
+            --border-color: #e5e0d8;
+            --overlay-color: rgba(0, 0, 0, 0.5);
+            --font-heading: 'Playfair Display', serif;
+            --font-sans: 'DM Sans', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #d4af37;
+            --primary-dark: #b8972e;
+            --card-bg: #1e1e1e;
+            --border-color: #2c2c2c;
+            --overlay-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* ================= RESET & BASE ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            height: 100vh;
+            transition: var(--transition);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+        }
+
+        button {
+            font-family: var(--font-sans);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        /* ================= HEADER & NAV ================= */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .brand {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .brand span {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links button {
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links button:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #themeBtn {
+            font-size: 1.2rem;
+        }
+
+        .cart-button {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .cart-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* ================= MOBILE NAV ================= */
+        .mobile-nav {
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            transition: left 0.4s ease;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .mobile-nav.active {
+            left: 0;
+        }
+
+        .mobile-nav button {
+            text-align: left;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* ================= PAGE SLIDER SYSTEM ================= */
+        .slider {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .page {
+            min-width: 100vw;
+            height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+        }
+
+        /* ================= HOME PAGE ================= */
+        .home-page {
+            background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            color: #fff;
+            position: relative;
+        }
+
+        .home-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--overlay-color);
+        }
+
+        .home-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .home-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .home-content h1 span {
+            color: var(--primary-color);
+        }
+
+        .home-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .home-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .primary-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .outline-btn {
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .outline-btn:hover {
+            background-color: #fff;
+            color: #2c2c2c;
+        }
+
+        .home-stats {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+        }
+
+        .home-stats div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .home-stats strong {
+            font-size: 2rem;
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+        }
+
+        .home-stats small {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* ================= COMMON HEADINGS ================= */
+        .page-heading {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-heading h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-heading p {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        /* ================= MENU PAGE ================= */
+        .category-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category {
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .category.active, .category:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        .food-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .food-details {
+            padding: 1.5rem;
+        }
+
+        .food-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-title h3 {
+            font-size: 1.2rem;
+        }
+
+        .food-title b {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .food-details p {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .food-details span {
+            display: block;
+            color: #ffc107;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .food-details button {
+            width: 100%;
+            padding: 0.6rem;
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .food-details button:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* ================= ABOUT PAGE ================= */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .large-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .text-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .text-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .about-boxes {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .about-boxes div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-boxes strong {
+            font-size: 1.8rem;
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+        }
+
+        .about-boxes span {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* ================= CHEFS PAGE ================= */
+        .chef-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .chef-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 1.5rem;
+        }
+
+        .chef-card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+        }
+
+        .chef-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .chef-card p {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .chef-card span {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            padding: 0 1rem;
+            display: block;
+        }
+
+        /* ================= GALLERY PAGE ================= */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.03);
+        }
+
+        /* ================= REVIEWS PAGE ================= */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .review {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .stars {
+            color: #ffc107;
+            margin-bottom: 1rem;
+        }
+
+        .review p {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .review h3 {
+            font-size: 1.1rem;
+        }
+
+        .review small {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* ================= OFFERS PAGE ================= */
+        .offer-page {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            color: #fff;
+            text-align: center;
+        }
+
+        .offer-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .offer-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .offer-content p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .offer-price {
+            font-size: 3.5rem;
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .offer-price small {
+            display: block;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            opacity: 0.8;
+        }
+
+        .offer-list {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .offer-list span {
+            font-weight: 500;
+        }
+
+        /* ================= RESERVATION PAGE ================= */
+        .reservation {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .reservation-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .reservation-info p {
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .contact-line {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        #reservationForm {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        #reservationForm input,
+        #reservationForm select,
+        #reservationForm textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 4px;
+            font-family: var(--font-sans);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        #reservationMessage {
+            margin-top: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        /* ================= ORDER / CART MODAL STYLES ================= */
+        .order-page {
+            text-align: center;
+        }
+
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            z-index: 2000;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: right 0.4s ease;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .two-column, .reservation {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .home-content h1 {
+                font-size: 2.5rem;
+            }
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+    <div class="navbar">
+        <button class="brand" onclick="goToPage(0)">
+            La<span>Tavola</span>
+        </button>
+
+        <nav class="nav-links">
+            <button onclick="goToPage(0)">Home</button>
+            <button onclick="goToPage(1)">Menu</button>
+            <button onclick="goToPage(2)">About</button>
+            <button onclick="goToPage(3)">Chefs</button>
+            <button onclick="goToPage(4)">Gallery</button>
+            <button onclick="goToPage(5)">Reviews</button>
+            <button onclick="goToPage(6)">Offers</button>
+            <button onclick="goToPage(7)">Reservation</button>
+            <button onclick="goToPage(8)">Order</button>
+            <button onclick="goToPage(9)">Contact</button>
+        </nav>
+
+        <div class="nav-actions">
+            <button id="themeBtn">🌙</button>
+            <button class="cart-button" onclick="openCart()">
+                🛒 <span id="cartCount">0</span>
+            </button>
+            <button class="mobile-menu" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </div>
+</header>
+
+<!-- ================= MOBILE NAV ================= -->
+<div class="mobile-nav" id="mobileNav">
+    <button onclick="goToPage(0)">🏠 Home</button>
+    <button onclick="goToPage(1)">🍽️ Menu</button>
+    <button onclick="goToPage(2)">📖 About</button>
+    <button onclick="goToPage(3)">👨‍🍳 Chefs</button>
+    <button onclick="goToPage(4)">📸 Gallery</button>
+    <button onclick="goToPage(5)">⭐ Reviews</button>
+    <button onclick="goToPage(6)">🎉 Offers</button>
+    <button onclick="goToPage(7)">📅 Reservation</button>
+    <button onclick="goToPage(8)">🛒 Order</button>
+    <button onclick="goToPage(9)">📍 Contact</button>
+</div>
+
+<!-- ================= PAGE SYSTEM ================= -->
+<main class="slider" id="slider">
+
+    <!-- PAGE 1 - HOME -->
+    <section class="page home-page">
+        <div class="home-overlay"></div>
+        <div class="home-content">
+            <p class="eyebrow">WELCOME TO LA TAVOLA</p>
+            <h1>Where Every <span>Bite Tells a Story.</span></h1>
+            <p>A premium dining experience where traditional flavors meet modern culinary creativity.</p>
+            <div class="home-buttons">
+                <button class="primary-btn" onclick="goToPage(1)">Explore Menu</button>
+                <button class="outline-btn" onclick="goToPage(7)">Reserve Table</button>
+            </div>
+            <div class="home-stats">
+                <div>
+                    <strong>15+</strong>
+                    <small>Years Experience</small>
+                </div>
+                <div>
+                    <strong>50+</strong>
+                    <small>Signature Dishes</small>
+                </div>
+                <div>
+                    <strong>20K+</strong>
+                    <small>Happy Guests</small>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">01 / 10</div>
+    </section>
+
+    <!-- PAGE 2 - MENU -->
+    <section class="page normal-page">
+        <div class="page-content">
+            <div class="page-heading">
+                <p class="eyebrow">OUR MENU</p>
+                <h2>Discover Our Flavors</h2>
+                <p>Fresh ingredients, traditional recipes and modern presentation.</p>
+            </div>
+
+            <div class="category-buttons">
+                <button class="category active" onclick="filterMenu('all', this)">All</button>
+                <button class="category" onclick="filterMenu('starter', this)">Starters</button>
+                <button class="category" onclick="filterMenu('main', this)">Main Course</button>
+                <button class="category" onclick="filterMenu('dessert', this)">Desserts</button>
+                <button class="category" onclick="filterMenu('drink', this)">Drinks</button>
+            </div>
+
+            <div class="menu-grid">
+                <article class="food-card" data-category="starter">
+                    <img src="https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?auto=format&fit=crop&w=700&q=80" alt="Bruschetta">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Bruschetta</h3>
+                            <b>₹299</b>
+                        </div>
+                        <p>Tomato, basil, garlic and toasted Italian bread.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Classic Bruschetta', 299)">Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="food-card" data-category="main">
+                    <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=700&q=80" alt="Creamy Pasta">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Creamy Pasta</h3>
+                            <b>₹449</b>
+                        </div>
+                        <p>Creamy parmesan sauce with herbs and pasta.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Creamy Pasta', 449)">Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="food-card" data-category="main">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80" alt="Italian Pizza">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Italian Pizza</h3>
+                            <b>₹499</b>
+                        </div>
+                        <p>Wood-fired pizza with mozzarella and basil.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Italian Pizza', 499)">Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="food-card" data-category="main">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80" alt="Grilled Steak">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Grilled Steak</h3>
+                            <b>₹799</b>
+                        </div>
+                        <p>Juicy grilled steak with seasonal vegetables.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Grilled Steak', 799)">Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="food-card" data-category="dessert">
+                    <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=700&q=80" alt="Chocolate Cake">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Chocolate Cake</h3>
+                            <b>₹249</b>
+                        </div>
+                        <p>Rich chocolate cake with creamy filling.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Chocolate Cake', 249)">Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="food-card" data-category="drink">
+                    <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=80" alt="Fresh Mocktail">
+                    <div class="food-details">
+                        <div class="food-title">
+                            <h3>Fresh Mocktail</h3>
+                            <b>₹199</b>
+                        </div>
+                        <p>Citrus, mint and berries blended perfectly.</p>
+                        <span>★★★★★</span>
+                        <button onclick="addToCart('Fresh Mocktail', 199)">Add to Order</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="slide-number">02 / 10</div>
+    </section>
+
+    <!-- PAGE 3 - ABOUT -->
+    <section class="page normal-page">
+        <div class="two-column page-content">
+            <div class="large-image">
+                <img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1000&q=80" alt="About Us">
+            </div>
+            <div class="text-content">
+                <p class="eyebrow">OUR STORY</p>
+                <h2>A Taste of Tradition, Made With Love.</h2>
+                <p>La Tavola began with a simple dream: create a place where people could experience extraordinary food in a warm and welcoming environment.</p>
+                <p>Our kitchen combines classic Italian-inspired techniques with modern culinary ideas.</p>
+                <p>Every ingredient is selected carefully and every dish is prepared with attention to detail.</p>
+                <div class="about-boxes">
+                    <div>
+                        <strong>2011</strong>
+                        <span>Established</span>
+                    </div>
+                    <div>
+                        <strong>50+</strong>
+                        <span>Dishes</span>
+                    </div>
+                    <div>
+                        <strong>20K+</strong>
+                        <span>Guests</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">03 / 10</div>
+    </section>
+
+    <!-- PAGE 4 - CHEFS -->
+    <section class="page normal-page">
+        <div class="page-content">
+            <div class="page-heading">
+                <p class="eyebrow">OUR TEAM</p>
+                <h2>Meet Our Chefs</h2>
+                <p>The talented people behind every memorable dish.</p>
+            </div>
+
+            <div class="chef-grid">
+                <div class="chef-card">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80" alt="Chef Arjun Sharma">
+                    <div>
+                        <h3>Chef Arjun Sharma</h3>
+                        <p>Executive Chef</p>
+                        <span>15 years of culinary experience.</span>
+                    </div>
+                </div>
+
+                <div class="chef-card">
+                    <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=800&q=80" alt="Chef Sofia Martin">
+                    <div>
+                        <h3>Chef Sofia Martin</h3>
+                        <p>Pastry Chef</p>
+                        <span>Specialist in desserts and pastries.</span>
+                    </div>
+                </div>
+
+                <div class="chef-card">
+                    <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=800&q=80" alt="Chef Daniel Lee">
+                    <div>
+                        <h3>Chef Daniel Lee</h3>
+                        <p>Sous Chef</p>
+                        <span>Expert in modern European cuisine.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">04 / 10</div>
+    </section>
+
+    <!-- PAGE 5 - GALLERY -->
+    <section class="page normal-page">
+        <div class="page-content">
+            <div class="page-heading">
+                <p class="eyebrow">OUR GALLERY</p>
+                <h2>A Glimpse of La Tavola</h2>
+            </div>
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Gallery 1">
+                <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=900&q=80" alt="Gallery 2">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80" alt="Gallery 3">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80" alt="Gallery 4">
+                <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80" alt="Gallery 5">
+                <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=900&q=80" alt="Gallery 6">
+            </div>
+        </div>
+        <div class="slide-number">05 / 10</div>
+    </section>
+
+    <!-- PAGE 6 - REVIEWS -->
+    <section class="page normal-page">
+        <div class="page-content">
+            <div class="page-heading">
+                <p class="eyebrow">TESTIMONIALS</p>
+                <h2>What Our Guests Say</h2>
+            </div>
+
+            <div class="reviews-grid">
+                <div class="review">
+                    <div class="stars">★★★★★</div>
+                    <p>"Absolutely beautiful restaurant. The food, service and atmosphere were perfect."</p>
+                    <h3>Priya Singh</h3>
+                    <small>Regular Guest</small>
+                </div>
+
+                <div class="review">
+                    <div class="stars">★★★★★</div>
+                    <p>"The creamy pasta was incredible. Definitely coming back again."</p>
+                    <h3>Rahul Verma</h3>
+                    <small>Food Lover</small>
+                </div>
+
+                <div class="review">
+                    <div class="stars">★★★★★</div>
+                    <p>"Perfect place for a family dinner. Highly recommended."</p>
+                    <h3>Ananya Gupta</h3>
+                    <small>Happy Guest</small>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">06 / 10</div>
+    </section>
+
+    <!-- PAGE 7 - OFFERS -->
+    <section class="page offer-page">
+        <div class="offer-content">
+            <p class="eyebrow">LIMITED TIME</p>
+            <h2>Weekend Special</h2>
+            <p>Enjoy our exclusive three-course chef's dinner with your loved ones.</p>
+            <div class="offer-price">
+                ₹999
+                <small>per person</small>
+            </div>
+            <button class="primary-btn" onclick="goToPage(7)">Reserve Now</button>
+            <div class="offer-list">
+                <span>✓ Starter</span>
+                <span>✓ Main Course</span>
+                <span>✓ Dessert</span>
+                <span>✓ Mocktail</span>
+            </div>
+        </div>
+        <div class="slide-number">07 / 10</div>
+    </section>
+
+    <!-- PAGE 8 - RESERVATION -->
+    <section class="page normal-page">
+        <div class="reservation page-content">
+            <div class="reservation-info">
+                <p class="eyebrow">RESERVATION</p>
+                <h2>Reserve Your Table</h2>
+                <p>Make your evening special. Reserve your table at La Tavola.</p>
+                <div class="contact-line">📞 +91 98765 43210</div>
+                <div class="contact-line">📍 123 Food Street, New Delhi</div>
+                <div class="contact-line">🕒 11:00 AM – 11:00 PM</div>
+            </div>
+
+            <form id="reservationForm">
+                <input type="text" id="guestName" placeholder="Your Name" required>
+                <input type="tel" id="guestPhone" placeholder="Phone Number" required>
+                <div class="form-row">
+                    <input type="date" id="bookingDate" required>
+                    <input type="time" id="bookingTime" required>
+                </div>
+                <select id="guestCount" required>
+                    <option value="">Number of Guests</option>
+                    <option>1 Person</option>
+                    <option>2 People</option>
+                    <option>3 People</option>
+                    <option>4 People</option>
+                    <option>5 People</option>
+                    <option>6+ People</option>
+                </select>
+                <textarea placeholder="Special Request" rows="5"></textarea>
+                <button class="primary-btn" type="submit">Confirm Reservation</button>
+                <p id="reservationMessage"></p>
+            </form>
+        </div>
+        <div class="slide-number">08 / 10</div>
+    </section>
+
+    <!-- PAGE 9 - ORDER / CONTACT -->
+    <section class="page normal-page">
+        <div class="page-content order-page">
+            <div class="page-heading">
+                <p class="eyebrow">ORDER ONLINE</p>
+                <h2>Enjoy La Tavola At Home</h2>
+                <p>Add your favorite dishes to your order from the menu tab and check out anytime!</p>
+            </div>
+            <button class="primary-btn" onclick="goToPage(1)">Browse Menu to Order</button>
+        </div>
+        <div class="slide-number">09 / 10</div>
+    </section>
+
+    <!-- PAGE 10 - CONTACT -->
+    <section class="page normal-page">
+        <div class="page-content">
+            <div class="page-heading">
+                <p class="eyebrow">GET IN TOUCH</p>
+                <h2>Contact Us</h2>
+                <p>We would love to hear from you.</p>
+            </div>
+        </div>
+        <div class="slide-number">10 / 10</div>
+    </section>
+
+</main>
+
+<!-- ================= EMBEDDED JAVASCRIPT ================= -->
+<script>
+    // --- PAGE SLIDER NAVIGATION ---
+    const slider = document.getElementById('slider');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function goToPage(index) {
+        slider.style.transform = `translateX(-${index * 100}vw)`;
+        mobileNav.classList.remove('active');
+    }
+
+    function toggleMobileMenu() {
+        mobileNav.classList.toggle('active');
+    }
+
+    // --- DARK/LIGHT THEME TOGGLE ---
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+        if (document.body.getAttribute('data-theme') === 'dark') {
+            document.body.removeAttribute('data-theme');
+            themeBtn.textContent = '🌙';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            themeBtn.textContent = '☀️';
+        }
+    });
+
+    // --- MENU CATEGORY FILTERING ---
+    function filterMenu(category, btnElement) {
+        document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        const cards = document.querySelectorAll('.food-card');
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // --- CART & ORDER SYSTEM ---
+    let cart = [];
+
+    function addToCart(name, price) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+        updateCartUI();
+        openCart();
+    }
+
+    function removeFromCart(name) {
+        cart = cart.filter(item => item.name !== name);
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const cartCount = document.getElementById('cartCount');
+        const cartBody = document.getElementById('cartBody');
+        const cartTotalAmount = document.getElementById('cartTotalAmount');
+
+        const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalCount;
+
+        if (cart.length === 0) {
+            cartBody.innerHTML = '<p style="text-align:center; opacity:0.6;">Your cart is empty.</p>';
+            cartTotalAmount.textContent = '₹0';
+            return;
+        }
+
+        let html = '';
+        let totalPrice = 0;
+
+        cart.forEach(item => {
+            totalPrice += item.price * item.quantity;
+            html += `
+                <div class="cart-item">
+                    <div>
+                        <h4>${item.name}</h4>
+                        <small>₹${item.price} × ${item.quantity}</small>
+                    </div>
+                    <button onclick="removeFromCart('${item.name}')" style="color:#ff4d4d; font-weight:bold;">✕</button>
+                </div>
+            `;
+        });
+
+        cartBody.innerHTML = html;
+        cartTotalAmount.textContent = `₹${totalPrice}`;
+    }
+
+    // Inject Cart Modal HTML dynamically into body
+    const cartModalHTML = `
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Your Order Cart</h3>
+            <button onclick="closeCart()" style="font-size: 1.2rem; font-weight:bold;">✕</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <p style="text-align:center; opacity:0.6;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotalAmount">₹0</span>
+            </div>
+            <button class="primary-btn" style="width:100%;" onclick="checkoutOrder()">Proceed to Checkout</button>
+        </div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', cartModalHTML);
+
+    function openCart() {
+        document.getElementById('cartModal').classList.add('active');
+    }
+
+    function closeCart() {
+        document.getElementById('cartModal').classList.remove('active');
+    }
+
+    function checkoutOrder() {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        alert('Thank you! Your order has been placed successfully.');
+        cart = [];
+        updateCartUI();
+        closeCart();
+    }
+
+    // --- RESERVATION FORM HANDLING ---
+    const reservationForm = document.getElementById('reservationForm');
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('guestName').value;
+            const date = document.getElementById('bookingDate').value;
+            const time = document.getElementById('bookingTime').value;
+            
+            const msg = document.getElementById('reservationMessage');
+            msg.textContent = `Thank you, ${name}! Your table is reserved for ${date} at ${time}.`;
+            reservationForm.reset();
+        });
+    }
+</script>
+
+</body>
+</html>
